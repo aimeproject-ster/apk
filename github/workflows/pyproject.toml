@@ -1,0 +1,37 @@
+[project]
+name = "aimebot"
+version = "1.0.0"
+description = "Voice-controlled Android Assistant"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "Your Name", email = "you@example.com" }
+]
+dependencies = [
+    "toga==0.4.0",
+    "requests==2.31.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.briefcase]
+project_name = "AimeBot"
+bundle = "com.yourname"
+version = "1.0"
+url = "https://github.com/yourusername/aimebot"
+
+[tool.briefcase.app.aimebot]
+formal_name = "AimeBot"
+description = "Voice Assistant for Android"
+sources = ["src/aimebot"]
+
+[tool.briefcase.app.aimebot.android]
+min_sdk = 24
+target_sdk = 33
+permissions = [
+    "RECORD_AUDIO",
+    "INTERNET",
+]
