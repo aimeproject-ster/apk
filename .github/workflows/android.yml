@@ -1,0 +1,48 @@
+name: Build AimeBot APK
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Briefcase
+        run: |
+          pip install --upgrade pip
+          pip install briefcase toga requests
+
+      - name: Build APK with Briefcase
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          briefcase create android
+          briefcase build android
+          briefcase package android
+
+      - name: Find and Upload APK
+        run: |
+          echo "🔍 Searching for APK files..."
+          find . -name "*.apk" -type f
+          mkdir -p dist
+          find . -name "*.apk" -type f -exec cp {} dist/ \;
+          echo "📁 APK files in dist folder:"
+          ls -la dist/
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: AimeBot-APK
+          path: dist/*.apk
+          if-no-files-found: warn
